@@ -22,7 +22,17 @@ _global_script_class_icons={
 
 config/name="Action RPG Demo"
 config/description="Action RPG demo game on Godot 3 engine"
+run/main_scene="res://World.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=320
+window/size/height=180
+window/size/test_width=1280
+window/size/test_height=720
+window/vsync/use_vsync=false
+window/stretch/mode="2d"
 
 [editor]
 
