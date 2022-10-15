@@ -7,18 +7,14 @@ const MAX_SPEED = 80
 var velocity = Vector2.ZERO
 
 onready var animation_player = $AnimationPlayer
+onready var animation_tree = $AnimationTree
+onready var animation_state = animation_tree.get("parameters/playback")
 
 # Engine callbacks
 func _physics_process(delta: float):
 	_process_movement(delta)
 
 # Private functions
-func _process_animation(input_vector):
-	if input_vector.x > 0:
-		animation_player.play("RunRight")
-	else:
-		animation_player.play("IdleRight")
-
 func _process_movement(delta: float):
 	var input_vector = Vector2(
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
@@ -26,14 +22,16 @@ func _process_movement(delta: float):
 	).normalized()
 
 	if input_vector != Vector2.ZERO:
-		animation_player.play("RunRight")
+		animation_tree.set("parameters/Idle/blend_position", input_vector)
+		animation_tree.set("parameters/Run/blend_position", input_vector)
+		animation_state.travel("Run")
+
 		velocity = velocity.move_toward(
 			input_vector * MAX_SPEED,
 			ACCELERATION * delta
 		)
 	else:
-		animation_player.play("IdleRight")
+		animation_state.travel("Idle")
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 
-	_process_animation(input_vector)
 	velocity = move_and_slide(velocity)
