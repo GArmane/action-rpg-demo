@@ -20,6 +20,7 @@ var roll_vector = Vector2.DOWN
 onready var animation_player = $AnimationPlayer
 onready var animation_tree = $AnimationTree
 onready var animation_state = animation_tree.get("parameters/playback")
+onready var sword_hitbox = $HitboxPivot/SwordHitbox
 
 # Engine callbacks
 func _physics_process(delta:float):
@@ -33,6 +34,7 @@ func _physics_process(delta:float):
 
 func _ready():
 	animation_tree.active = true
+	sword_hitbox.knockback_vector = roll_vector
 
 # State Machine
 func _attack_state_finished():
@@ -53,13 +55,10 @@ func _process_move_state(delta: float):
 	).normalized()
 
 	if input_vector != Vector2.ZERO:
-		animation_tree.set("parameters/Attack/blend_position", input_vector)
-		animation_tree.set("parameters/Idle/blend_position", input_vector)
-		animation_tree.set("parameters/Roll/blend_position", input_vector)
-		animation_tree.set("parameters/Run/blend_position", input_vector)
+		_set_blend_positions(input_vector)
 		animation_state.travel("Run")
 
-		roll_vector = input_vector
+		_update_roll_vector(input_vector)
 		velocity = velocity.move_toward(
 			input_vector * MAX_SPEED,
 			ACCELERATION * delta
@@ -86,3 +85,13 @@ func _process_roll_state(_delta: float):
 # Private Functions
 func _move():
 	velocity = move_and_slide(velocity)
+
+func _set_blend_positions(vector: Vector2):
+	animation_tree.set("parameters/Attack/blend_position", vector)
+	animation_tree.set("parameters/Idle/blend_position", vector)
+	animation_tree.set("parameters/Roll/blend_position", vector)
+	animation_tree.set("parameters/Run/blend_position", vector)
+
+func _update_roll_vector(vector: Vector2):
+	roll_vector = vector
+	sword_hitbox.knockback_vector = vector
