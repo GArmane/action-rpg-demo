@@ -18,7 +18,7 @@ onready var animation_tree = $AnimationTree
 onready var animation_state = animation_tree.get("parameters/playback")
 
 # Engine callbacks
-func _process(delta: float):
+func _physics_process(delta:float):
 	match state:
 		MOVE:
 			_process_move_state(delta)
