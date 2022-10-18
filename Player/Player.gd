@@ -15,10 +15,12 @@ enum {
 var state = MOVE
 var velocity = Vector2.ZERO
 var roll_vector = Vector2.DOWN
+var stats = PlayerStats
 
 onready var animation_player = $AnimationPlayer
 onready var animation_tree = $AnimationTree
 onready var animation_state = animation_tree.get("parameters/playback")
+onready var hurtbox = $Hurtbox
 onready var sword_hitbox = $HitboxPivot/SwordHitbox
 
 # Engine callbacks
@@ -33,6 +35,7 @@ func _physics_process(delta:float):
 
 func _ready():
 	animation_tree.active = true
+	stats.connect("no_health", self, "queue_free")
 	sword_hitbox.knockback_vector = roll_vector
 
 # State Machine
@@ -94,3 +97,9 @@ func _set_blend_positions(vector: Vector2):
 func _update_roll_vector(vector: Vector2):
 	roll_vector = vector
 	sword_hitbox.knockback_vector = vector
+
+# Signals
+func _on_Hurtbox_area_entered(_area: Area2D):
+	stats.health -= 1
+	hurtbox.start_invinsibility(0.5)
+	hurtbox.create_hit_effect()

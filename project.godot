@@ -25,6 +25,10 @@ config/description="Action RPG demo game on Godot 3 engine"
 run/main_scene="res://World.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+PlayerStats="*res://Player/PlayerStats.tscn"
+
 [display]
 
 window/size/width=320
