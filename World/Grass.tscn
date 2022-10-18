@@ -21,6 +21,7 @@ collision_layer = 8
 __meta__ = {
 "_edit_group_": true
 }
+show_hit_effect = false
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
 shape = SubResource( 1 )
