@@ -10,6 +10,7 @@ const EnemyDeathEffect = preload("res://Effects/EnemyDeathEffect.tscn")
 
 const KNOCKBACK_SPEED = 120
 const KNOCKBACK_FRICTION = 200
+const SOFT_COLLISION_PUSHBACK = 400
 
 export var ACCELERATION: int = 300
 export var FRICTION: int = 200
@@ -19,6 +20,7 @@ onready var hurtbox = $Hurtbox
 onready var stats = $Stats
 onready var sprite = $AnimatedSprite
 onready var player_detection_zone = $PlayerDetection
+onready var soft_collision = $SoftCollision
 
 var knockback = Vector2.ZERO
 var state = CHASE
@@ -44,6 +46,8 @@ func _physics_process(delta: float):
 				state = IDLE
 			sprite.flip_h = velocity.x < 0
 
+	if soft_collision.is_colliding():
+		velocity += soft_collision.get_push_vector() * delta * SOFT_COLLISION_PUSHBACK
 	velocity = move_and_slide(velocity)
 
 # State machine
