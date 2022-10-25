@@ -17,11 +17,12 @@ export var FRICTION: int = 200
 export var MAX_SPEED: int = 50
 export var WANDER_TARGET_RANGE = 4
 
+onready var blink_animation = $BlinkAnimation
 onready var hurtbox = $Hurtbox
-onready var stats = $Stats
-onready var sprite = $AnimatedSprite
 onready var player_detection_zone = $PlayerDetection
+onready var sprite = $AnimatedSprite
 onready var soft_collision = $SoftCollision
+onready var stats = $Stats
 onready var wanderer_controller = $WandererController
 
 var knockback = Vector2.ZERO
@@ -89,6 +90,13 @@ func _on_Hurtbox_area_entered(area: Area2D):
 	stats.health -= area.damage
 	knockback = area.knockback_vector * KNOCKBACK_SPEED
 	hurtbox.create_hit_effect()
+	hurtbox.start_invinsibility(0.4)
+
+func _on_Hurtbox_invincibility_started():
+	blink_animation.play("Start")
+
+func _on_Hurtbox_invincibility_ended():
+	blink_animation.play("Stop")
 
 func _on_Stats_no_health():
 	var death_effect = EnemyDeathEffect.instance()
