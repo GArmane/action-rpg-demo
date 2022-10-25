@@ -104,7 +104,7 @@ func _update_roll_vector(vector: Vector2):
 # Signals
 func _on_Hurtbox_area_entered(area: Area2D):
 	stats.health -= area.damage
-	hurtbox.start_invinsibility(0.5)
+	hurtbox.start_invinsibility(0.6)
 	hurtbox.create_hit_effect()
 
 	get_tree().current_scene.add_child(player_hut_sound.instance())

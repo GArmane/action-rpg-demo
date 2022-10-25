@@ -2,6 +2,7 @@ extends Area2D
 
 const HitEffect = preload("res://Effects/HitEffect.tscn")
 
+onready var collision_shape_2d = $CollisionShape2D
 onready var timer = $Timer
 
 var invincible: bool = false setget _set_invincible
@@ -32,10 +33,10 @@ func _set_invincible(value: bool):
 
 # Signals
 func _on_Hurtbox_invincibility_ended():
-	set_deferred("monitoring", true)
+	collision_shape_2d.set_deferred("disabled", false)
 
 func _on_Hurtbox_invincibility_started():
-	set_deferred("monitoring", false)
+	collision_shape_2d.set_deferred("disabled", true)
 
 func _on_Timer_timeout():
 	self.invincible = false
